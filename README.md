@@ -1,2 +1,2 @@
 # Tetris
-Clon de Tetris hecho en Java
+Clon de Tetris hecho en Java (EN PROGRESO)
