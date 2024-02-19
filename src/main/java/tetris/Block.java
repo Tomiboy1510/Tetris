@@ -7,7 +7,7 @@ public class Block {
     public int x;
     public int y;
     public Color color;
-    public static int size;
+    public static int SIZE;
 
     public Block(int x, int y, Color color) {
         this.x = x;
@@ -20,20 +20,20 @@ public class Block {
         g.setColor(color.brighter());
         Polygon triangle = new Polygon();
         triangle.addPoint(x,y);
-        triangle.addPoint(x, y+size);
-        triangle.addPoint(x+size, y);
+        triangle.addPoint(x, y+ SIZE);
+        triangle.addPoint(x+ SIZE, y);
         g.fillPolygon(triangle);
 
         g.setColor(color.darker());
         triangle = new Polygon();
-        triangle.addPoint(x+size, y+size);
-        triangle.addPoint(x, y+size);
-        triangle.addPoint(x+size, y);
+        triangle.addPoint(x+ SIZE, y+ SIZE);
+        triangle.addPoint(x, y+ SIZE);
+        triangle.addPoint(x+ SIZE, y);
         g.fillPolygon(triangle);
 
-        int centerX = x + size/4;
-        int centerY = y + size/4;
+        int centerX = x + SIZE /4;
+        int centerY = y + SIZE /4;
         g.setColor(color);
-        g.fillRect(centerX, centerY, size/2, size/2);
+        g.fillRect(centerX, centerY, SIZE /2, SIZE /2);
     }
 }

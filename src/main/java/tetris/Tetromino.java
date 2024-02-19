@@ -15,5 +15,37 @@ public abstract class Tetromino {
         return blocks;
     }
 
-    public abstract Tetromino rotate(); //Retorna un nuevo tetromino rotado 90 grados en sentido horario
+    public void rotateClockWise() {
+        int pivotX = getBlocks()[0].x;
+        int pivotY = getBlocks()[0].y;
+
+        for (Block b : getBlocks()) {
+            b.x -= pivotX;
+            b.y -= pivotY;
+
+            int temp = b.x;
+            b.x = (b.y) * -1;
+            b.y = temp;
+
+            b.x += pivotX;
+            b.y += pivotY;
+        }
+    }
+
+    public void rotateCounterClockWise() {
+        int pivotX = getBlocks()[0].x;
+        int pivotY = getBlocks()[0].y;
+
+        for (Block b : getBlocks()) {
+            b.x -= pivotX;
+            b.y -= pivotY;
+
+            int temp = b.x;
+            b.x = b.y;
+            b.y = temp * -1;
+
+            b.x += pivotX;
+            b.y += pivotY;
+        }
+    }
 }

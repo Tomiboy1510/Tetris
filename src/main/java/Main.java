@@ -1,13 +1,12 @@
 import javax.swing.*;
+import java.util.Random;
 
 /*
     Cosas que podría implementar luego:
 
-    - Poder cambiar key bindings
-    - Generación de bloques en base a una semilla custom
-    - Paletas de colores
-    - Launcher con distintas resoluciones
+    - Launcher con: keybindings, paletas de colores, resolución, FPS
     - Ventana resizable
+    - Queue de eventos
 */
 
 public class Main {
@@ -15,7 +14,8 @@ public class Main {
     public static void main (String[] args) {
 
         JFrame window = new JFrame("Tetris");
-        GamePanel gp = new GamePanel(1024, 768);
+        long seed = new Random().nextLong();
+        GamePanel gp = new GamePanel(1024, 768, seed, 120);
 
         window.add(gp);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

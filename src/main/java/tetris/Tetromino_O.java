@@ -4,17 +4,21 @@ import java.awt.*;
 
 public class Tetromino_O extends Tetromino {
 
-    private static final Color color = Color.ORANGE;
+    public static Color COLOR;
 
     public Tetromino_O(int x, int y) {
-        blocks[0] = new Block(x, y, color);
-        blocks[1] = new Block(x + Block.size, y, color);
-        blocks[2] = new Block(x, y + Block.size, color);
-        blocks[3] = new Block(x + Block.size, y + Block.size, color);
+        x -= Block.SIZE; // Offset
+        blocks[0] = new Block(x, y, COLOR);
+        blocks[1] = new Block(x + Block.SIZE, y, COLOR);
+        blocks[2] = new Block(x, y + Block.SIZE, COLOR);
+        blocks[3] = new Block(x + Block.SIZE, y + Block.SIZE, COLOR);
     }
 
-    @Override
-    public Tetromino rotate() {
-        return this;
+    public void rotateClockWise() {
+        // No hacer nada
+    }
+
+    public void rotateCounterClockWise() {
+        // No hacer nada
     }
 }

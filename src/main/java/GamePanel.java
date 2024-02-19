@@ -1,27 +1,25 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    private int WIDTH;
-    private int HEIGHT;
+    private final int fps;
     private Thread gameThread;
-    private GameArea gameArea;
-    private InputHandler inputHandler;
+    private final GameArea gameArea;
 
-    public GamePanel(int WIDTH, int HEIGHT) {
+    public GamePanel(int WIDTH, int HEIGHT, long seed, int fps) {
 
-        this.WIDTH = WIDTH;
-        this.HEIGHT = HEIGHT;
+        this.fps = fps;
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.BLACK);
         this.setLayout(null);
         this.setFocusable(true);
 
-        inputHandler = new InputHandler();
-        this.addKeyListener(inputHandler);
+        setupInputHandling();
 
         // Inicializar área de juego (asegurando que la altura sea múltiplo de 20)
+        // La altura es el doble de 10, que es el ancho en bloques del área de juego
         int pretendedHeight = (int)(HEIGHT * 0.9);
         int remainder = pretendedHeight % 20;
         int gameAreaHeight = remainder == 0 ?
@@ -33,8 +31,60 @@ public class GamePanel extends JPanel implements Runnable {
                 WIDTH/2 - gameAreaWidth/2,
                 HEIGHT/2 - gameAreaHeight/2,
                 gameAreaWidth,
-                gameAreaHeight
+                gameAreaHeight,
+                seed,
+                fps
         );
+    }
+
+    private void setupInputHandling() {
+
+        ActionMap actionMap = getActionMap();
+        InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+        actionMap.put("moveLeft", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameArea.moveLeft();
+            }
+        });
+        actionMap.put("moveRight", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameArea.moveRight();
+            }
+        });
+        actionMap.put("moveDown", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameArea.moveDown();
+            }
+        });
+        actionMap.put("pause", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameArea.pause();
+            }
+        });
+        actionMap.put("rotateClockWise", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameArea.rotateClockWise();
+            }
+        });
+        actionMap.put("rotateCounterClockWise", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameArea.rotateCounterClockWise();
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke("A"), "moveLeft");
+        inputMap.put(KeyStroke.getKeyStroke("D"), "moveRight");
+        inputMap.put(KeyStroke.getKeyStroke("S"), "moveDown");
+        inputMap.put(KeyStroke.getKeyStroke("SPACE"), "rotateClockWise");
+        inputMap.put(KeyStroke.getKeyStroke("Z"), "rotateCounterClockWise");
+        inputMap.put(KeyStroke.getKeyStroke("P"), "pause");
     }
 
     public void startGame() {
@@ -45,21 +95,26 @@ public class GamePanel extends JPanel implements Runnable {
     @Override
     public void run() {
         //  Game loop
+        long lastTime = System.nanoTime();
+        long now;
+        double intervalNano = 1_000_000_000 / (double)fps;
+        double delta = 0;
+
         while (gameThread != null) {
-            update();
-            repaint();
+
+            now = System.nanoTime();
+            delta += (now - lastTime) / intervalNano;
+            lastTime = now;
+
+            while (delta >= 1) {
+                gameArea.update();
+                repaint();
+                delta--;
+            }
         }
     }
 
-    private void update() {
-        // Gestionar input
-
-        // Actualizar estado del juego
-        gameArea.update();
-    }
-
     public void paintComponent(Graphics g) {
-
         // Dibujar área de juego
         super.paintComponent(g);
         gameArea.draw((Graphics2D) g);
