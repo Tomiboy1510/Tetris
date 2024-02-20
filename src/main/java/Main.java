@@ -6,7 +6,6 @@ import java.util.Random;
 
     - Launcher con: keybindings, paletas de colores, resolución, FPS
     - Ventana resizable
-    - Queue de eventos
 */
 
 public class Main {

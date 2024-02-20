@@ -9,7 +9,6 @@ public class GamePanel extends JPanel implements Runnable {
     private final GameArea gameArea;
 
     public GamePanel(int WIDTH, int HEIGHT, long seed, int fps) {
-
         this.fps = fps;
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.BLACK);
@@ -38,26 +37,25 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void setupInputHandling() {
-
         ActionMap actionMap = getActionMap();
         InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         actionMap.put("moveLeft", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameArea.moveLeft();
+                gameArea.move(GameArea.Movements.LEFT);
             }
         });
         actionMap.put("moveRight", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameArea.moveRight();
+                gameArea.move(GameArea.Movements.RIGHT);
             }
         });
         actionMap.put("moveDown", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameArea.moveDown();
+                gameArea.move(GameArea.Movements.DOWN);
             }
         });
         actionMap.put("pause", new AbstractAction() {
@@ -69,13 +67,13 @@ public class GamePanel extends JPanel implements Runnable {
         actionMap.put("rotateClockWise", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameArea.rotateClockWise();
+                gameArea.move(GameArea.Movements.ROTATE_CLOCKWISE);
             }
         });
         actionMap.put("rotateCounterClockWise", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameArea.rotateCounterClockWise();
+                gameArea.move(GameArea.Movements.ROTATE_COUNTER_CLOCKWISE);
             }
         });
 
@@ -97,11 +95,10 @@ public class GamePanel extends JPanel implements Runnable {
         //  Game loop
         long lastTime = System.nanoTime();
         long now;
-        double intervalNano = 1_000_000_000 / (double)fps;
+        double intervalNano = 1_000_000_000 / (double) fps;
         double delta = 0;
 
-        while (gameThread != null) {
-
+        while (true) {
             now = System.nanoTime();
             delta += (now - lastTime) / intervalNano;
             lastTime = now;
