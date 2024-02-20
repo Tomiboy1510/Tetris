@@ -1,3 +1,7 @@
+package main;
+
+import tetris.GameSettings;
+
 import javax.swing.*;
 import java.util.Random;
 
@@ -14,7 +18,12 @@ public class Main {
 
         JFrame window = new JFrame("Tetris");
         long seed = new Random().nextLong();
-        GamePanel gp = new GamePanel(1024, 768, seed, 120);
+        GamePanel gp = new GamePanel(new GameSettings(
+                1024,
+                768,
+                seed,
+                60
+        ));
 
         window.add(gp);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
