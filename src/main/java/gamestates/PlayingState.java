@@ -1,10 +1,10 @@
 package gamestates;
 
+import tetris.ButtonPress;
 import tetris.GameArea;
 import tetris.GameSettings;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 
 public class PlayingState implements GameState {
 
@@ -18,41 +18,43 @@ public class PlayingState implements GameState {
 
         // Inicializar área de juego (asegurando que la altura sea múltiplo de 20)
         // La altura es el doble de 10, que es el ancho en bloques del área de juego
-        int pretendedHeight = (int)(settings.HEIGHT() * 0.9);
+        int pretendedHeight = (int) (settings.height() * 0.9);
         int remainder = pretendedHeight % 20;
         int gameAreaHeight = remainder == 0 ?
                 pretendedHeight :
                 pretendedHeight - remainder;
-        int gameAreaWidth = gameAreaHeight/2;
+        int gameAreaWidth = gameAreaHeight / 2;
 
         gameArea = new GameArea(
-                settings.WIDTH()/2 - gameAreaWidth/2,
-                settings.HEIGHT()/2 - gameAreaHeight/2,
+                settings.width() / 2 - gameAreaWidth / 2,
+                settings.height() / 2 - gameAreaHeight / 2,
                 gameAreaWidth,
                 gameAreaHeight,
                 settings.seed(),
-                settings.fps()
+                settings.fps(),
+                settings.palette()
         );
     }
 
     @Override
     public void entering() {
-        gameArea.reset();
+        if (gameArea.isGameOver())
+            gameArea.reset();
     }
 
     @Override
     public void update() {
         if (gameArea.isGameOver()) {
             manager.push(new WaitingState(manager, this, fps * 2));
-            return;
-        }
-        gameArea.update();
+        } else
+            gameArea.update();
     }
 
     @Override
     public void draw(Graphics2D g) {
         gameArea.draw(g);
         // Dibujar elementos de la interfaz
+        //gameArea.getNextTetromino().draw(g);
     }
 
     @Override
@@ -61,20 +63,14 @@ public class PlayingState implements GameState {
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_A -> gameArea.moveTetromino(-1, 0);
-            case KeyEvent.VK_D -> gameArea.moveTetromino(1, 0);
-            case KeyEvent.VK_S -> gameArea.moveTetromino(0, 1);
-            case KeyEvent.VK_SPACE -> gameArea.rotateClockWise();
-            case KeyEvent.VK_Z -> gameArea.rotateCounterClockWise();
-            case KeyEvent.VK_P -> manager.push(new PauseState(manager, this));
+    public void buttonPressed(ButtonPress p) {
+        switch (p) {
+            case MOVE_LEFT -> gameArea.moveLeft();
+            case MOVE_RIGHT -> gameArea.moveRight();
+            case MOVE_DOWN -> gameArea.moveDown();
+            case ROTATE_CLOCKWISE -> gameArea.rotateClockWise();
+            case ROTATE_COUNTER_CLOCKWISE -> gameArea.rotateCounterClockWise();
+            case PAUSE -> manager.push(new PauseState(manager, this));
         }
     }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
-
 }

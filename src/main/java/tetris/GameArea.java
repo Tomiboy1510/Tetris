@@ -5,19 +5,16 @@ import java.util.Random;
 
 public class GameArea {
 
-    private final int leftX;
-    private final int rightX;
-    private final int topY;
-    private final int bottomY;
+    private final int leftX, rightX, topY, bottomY;
     private final Random random;
 
     private final int framesUntilDrop;
     private int dropCounter;
     private boolean gameOver;
-    private Tetromino currentTetromino;
+    private Tetromino currentTetromino, nextTetromino;
     private final Block[][] staticBlocks = new Block[10][20];
 
-    public GameArea(int posX, int posY, int width, int height, long seed, int fps) {
+    public GameArea(int posX, int posY, int width, int height, long seed, int fps, Color[] palette) {
 
         // Fronteras del área
         this.leftX = posX;
@@ -27,19 +24,20 @@ public class GameArea {
         Block.SIZE = (width) / 10;
 
         // Colores de los tetrominos
-        Tetromino_I.COLOR = new Color(249, 65, 68);
-        Tetromino_J.COLOR = new Color(243, 114, 44);
-        Tetromino_L.COLOR = new Color(248, 150, 30);
-        Tetromino_O.COLOR = new Color(249, 199, 79);
-        Tetromino_S.COLOR = new Color(144, 190, 109);
-        Tetromino_T.COLOR = new Color(67, 170, 139);
-        Tetromino_Z.COLOR = new Color(87, 117, 144);
+        Tetromino_I.COLOR = palette[0];
+        Tetromino_J.COLOR = palette[1];
+        Tetromino_L.COLOR = palette[2];
+        Tetromino_O.COLOR = palette[3];
+        Tetromino_S.COLOR = palette[4];
+        Tetromino_T.COLOR = palette[5];
+        Tetromino_Z.COLOR = palette[6];
 
         // Variables del juego
         framesUntilDrop = fps / 2;
         dropCounter = 0;
-
+        gameOver = true;
         random = new Random(seed);
+        nextTetromino = getTetromino((rightX + leftX) / 2, topY);
     }
 
     public void update() {
@@ -49,10 +47,9 @@ public class GameArea {
                 freezeTetromino();
                 clearRows();
                 spawnTetromino();
-            }
-            else
+            } else
                 // Hacer caer el tetromino
-                moveTetromino(0, 1);
+                moveDown();
             dropCounter = 0;
         }
         dropCounter++;
@@ -94,24 +91,6 @@ public class GameArea {
         return gameOver;
     }
 
-    private void spawnTetromino() {
-        Tetromino tetro;
-        int x = (rightX + leftX) / 2;
-        tetro = switch (random.nextInt(7)) {
-            default -> new Tetromino_I(x, topY);
-            case 1 -> new Tetromino_J(x, topY);
-            case 2 -> new Tetromino_L(x, topY);
-            case 3 -> new Tetromino_O(x, topY);
-            case 4 -> new Tetromino_S(x, topY);
-            case 5 -> new Tetromino_T(x, topY);
-            case 6 -> new Tetromino_Z(x, topY);
-        };
-        currentTetromino = tetro;
-
-        if (collides(currentTetromino))
-            gameOver = true;
-    }
-
     public void rotateClockWise() {
         currentTetromino.rotate(Tetromino.RotationSenses.CLOCKWISE);
         if (collides(currentTetromino) || outOfBounds(currentTetromino))
@@ -122,6 +101,34 @@ public class GameArea {
         currentTetromino.rotate(Tetromino.RotationSenses.COUNTER_CLOCKWISE);
         if (collides(currentTetromino) || outOfBounds(currentTetromino))
             currentTetromino.rotate(Tetromino.RotationSenses.CLOCKWISE);
+    }
+
+    public void moveLeft() {
+        for (Block b : currentTetromino.getBlocks())
+            b.x -= Block.SIZE;
+        if (collides(currentTetromino) || outOfBounds(currentTetromino))
+            moveRight();
+    }
+
+    public void moveRight() {
+        for (Block b : currentTetromino.getBlocks())
+            b.x += Block.SIZE;
+        if (collides(currentTetromino) || outOfBounds(currentTetromino))
+            moveLeft();
+    }
+
+    public void moveDown() {
+        for (Block b : currentTetromino.getBlocks())
+            b.y += Block.SIZE;
+        if (collides(currentTetromino) || outOfBounds(currentTetromino))
+            for (Block b : currentTetromino.getBlocks())
+                b.y -= Block.SIZE;
+        else
+            dropCounter = 0;
+    }
+
+    public Tetromino getNextTetromino() {
+        return nextTetromino;
     }
 
     private boolean collides(Block b) {
@@ -153,21 +160,32 @@ public class GameArea {
         return false;
     }
 
-    public void moveTetromino(int dx, int dy) {
-        for (Block b : currentTetromino.getBlocks()) {
-            b.x += Block.SIZE * dx;
-            b.y += Block.SIZE * dy;
-        }
-        if (collides(currentTetromino) || outOfBounds(currentTetromino))
-            moveTetromino(-1 * dx, -1 * dy);
-    }
-
     private void freezeTetromino() {
         for (Block b : currentTetromino.getBlocks()) {
             int x = (b.x - leftX) / Block.SIZE;
             int y = (b.y - topY) / Block.SIZE;
             staticBlocks[x][y] = b;
         }
+    }
+
+    private void spawnTetromino() {
+        currentTetromino = nextTetromino;
+        nextTetromino = getTetromino((rightX + leftX) / 2, topY);
+        if (collides(currentTetromino))
+            gameOver = true;
+    }
+
+    private Tetromino getTetromino(int x, int y) {
+        return switch (random.nextInt(7)) {
+            case 0 -> new Tetromino_I(x, y);
+            case 1 -> new Tetromino_J(x, y);
+            case 2 -> new Tetromino_L(x, y);
+            case 3 -> new Tetromino_O(x, y);
+            case 4 -> new Tetromino_S(x, y);
+            case 5 -> new Tetromino_T(x, y);
+            case 6 -> new Tetromino_Z(x, y);
+            default -> throw new IllegalStateException("Unexpected value: " + random.nextInt(7));
+        };
     }
 
     private boolean isAtBottom() {

@@ -1,5 +1,7 @@
 package gamestates;
 
+import tetris.ButtonPress;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
@@ -40,15 +42,10 @@ public class PauseState implements GameState {
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
-        // Salir de la pausa!
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_P -> manager.pop();
+    public void buttonPressed(ButtonPress p) {
+        // Salir de la pausa
+        switch (p) {
+            case PAUSE -> manager.pop();
         }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
     }
 }

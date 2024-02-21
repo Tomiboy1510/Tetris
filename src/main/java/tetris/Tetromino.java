@@ -37,7 +37,6 @@ public abstract class Tetromino {
                     b.x = b.y;
                     b.y = temp * -1;
                 default:
-                    ;
             }
             b.x += pivotX;
             b.y += pivotY;

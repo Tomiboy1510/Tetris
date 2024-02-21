@@ -1,9 +1,9 @@
 package gamestates;
 
+import tetris.ButtonPress;
 import tetris.GameSettings;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.util.Stack;
 
 public class GameStateManager {
@@ -12,10 +12,8 @@ public class GameStateManager {
 
     public GameStateManager(GameSettings settings) {
         states = new Stack<>();
-        states.push(new PlayingState(this, settings));
-        states.push(
-                new WaitingState(this, states.peek(), settings.fps() / 2)   // Medio segundo de pausa al iniciar el juego
-        );
+        push(new PlayingState(this, settings));
+        push(new WaitingState(this, states.peek(), settings.fps() / 2));   // Medio segundo de pausa al iniciar el juego
     }
 
     public void push(GameState state) {
@@ -36,11 +34,7 @@ public class GameStateManager {
         states.peek().draw(g);
     }
 
-    public void keyPressed(KeyEvent e) {
-        states.peek().keyPressed(e);
-    }
-
-    public void keyReleased(KeyEvent e) {
-        states.peek().keyReleased(e);
+    public void buttonPressed(ButtonPress p) {
+        states.peek().buttonPressed(p);
     }
 }

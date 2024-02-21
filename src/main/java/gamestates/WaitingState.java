@@ -1,5 +1,7 @@
 package gamestates;
 
+import tetris.ButtonPress;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
@@ -41,12 +43,7 @@ public class WaitingState implements GameState {
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
+    public void buttonPressed(ButtonPress p) {
 
     }
 }

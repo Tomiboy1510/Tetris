@@ -1,8 +1,12 @@
 package tetris;
 
+import java.awt.*;
+
 public record GameSettings(
-        int WIDTH,
-        int HEIGHT,
+        int width,
+        int height,
         long seed,
-        int fps
+        int fps,
+        Color[] palette,
+        String[] keys
 ) {}
