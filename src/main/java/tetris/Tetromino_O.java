@@ -14,11 +14,7 @@ public class Tetromino_O extends Tetromino {
         blocks[3] = new Block(x + Block.SIZE, y + Block.SIZE, COLOR);
     }
 
-    public void rotateClockWise() {
-        // No hacer nada
-    }
+    public void rotate(RotationSenses r) {
 
-    public void rotateCounterClockWise() {
-        // No hacer nada
     }
 }
