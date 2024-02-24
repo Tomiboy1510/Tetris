@@ -3,7 +3,6 @@ package gamestates;
 import tetris.ButtonPress;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 
 public class WaitingState implements GameState {
 
