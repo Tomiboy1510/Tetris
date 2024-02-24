@@ -44,6 +44,8 @@ public class WaitingState implements GameState {
 
     @Override
     public void buttonPressed(ButtonPress p) {
-
+        switch (p) {
+            case PAUSE -> manager.push(new PauseState(manager, this));
+        }
     }
 }

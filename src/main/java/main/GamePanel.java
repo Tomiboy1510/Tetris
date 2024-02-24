@@ -94,6 +94,7 @@ public class GamePanel extends JPanel implements Runnable {
         public void actionPerformed(ActionEvent e) {
             if (e.getActionCommand().startsWith("rel ")) {
                 // Soltar botón?
+
             }
             manager.buttonPressed(p);
         }

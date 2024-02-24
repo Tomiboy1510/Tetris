@@ -7,16 +7,14 @@ import java.awt.*;
 import java.util.Random;
 
 /*
-    Cosas que podría implementar luego:
-    - Launcher con: keybindings, paletas de colores, resolución, FPS
-
     TODO:
         - Dibujar bloques en sus posiciones relativas al tetromino
         - Permitir a un tetromino cambiar de posición (afectando a los bloques) que lo componen,
           o bien, permitir renderizar un tetromino en cualquier posición.
           (Esto es para poder renderizar el siguiente tetromino fuera del área de juego)
-        - Mudar el código de GameArea a PlayingState? (Quizá es mejor separar el área de juego de otros elementos de la GUI)
         - Gestionar los keyReleases
+     Cosas que podría implementar luego:
+        - Launcher con: keybindings, paletas de colores, resolución, FPS
 */
 
 public class Main {
