@@ -46,8 +46,8 @@ public class PauseState implements GameState {
         switch (p) {
             case PAUSE -> manager.pop();
             case RESET -> {
-                stateBeneath.buttonPressed(ButtonPress.RESET);
                 manager.pop();
+                stateBeneath.buttonPressed(ButtonPress.RESET);
             }
         }
     }

@@ -5,8 +5,8 @@ import tetris.ButtonPress;
 
 public class GameController {
 
-    private boolean[] pressed;
-    private GameStateManager manager;
+    private final boolean[] pressed;
+    private final GameStateManager manager;
 
     public GameController(GameStateManager manager) {
         this.manager = manager;
