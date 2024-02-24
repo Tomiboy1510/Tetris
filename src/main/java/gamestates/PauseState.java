@@ -3,7 +3,6 @@ package gamestates;
 import tetris.ButtonPress;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 
 public class PauseState implements GameState {
 
@@ -46,6 +45,10 @@ public class PauseState implements GameState {
         // Salir de la pausa
         switch (p) {
             case PAUSE -> manager.pop();
+            case RESET -> {
+                stateBeneath.buttonPressed(ButtonPress.RESET);
+                manager.pop();
+            }
         }
     }
 }

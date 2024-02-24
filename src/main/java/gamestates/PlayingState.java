@@ -38,14 +38,14 @@ public class PlayingState implements GameState {
 
     @Override
     public void entering() {
-        if (gameArea.isGameOver())
-            gameArea.reset();
+
     }
 
     @Override
     public void update() {
         if (gameArea.isGameOver()) {
-            manager.push(new WaitingState(manager, this, fps * 2));
+            manager.push(new WaitingState(manager, this, fps));
+            gameArea.reset();
         } else
             gameArea.update();
     }
@@ -71,6 +71,7 @@ public class PlayingState implements GameState {
             case ROTATE_CLOCKWISE -> gameArea.rotateClockWise();
             case ROTATE_COUNTER_CLOCKWISE -> gameArea.rotateCounterClockWise();
             case PAUSE -> manager.push(new PauseState(manager, this));
+            case RESET -> gameArea.setGameOver(true);
         }
     }
 }

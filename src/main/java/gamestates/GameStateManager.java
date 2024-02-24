@@ -13,7 +13,6 @@ public class GameStateManager {
     public GameStateManager(GameSettings settings) {
         states = new Stack<>();
         push(new PlayingState(this, settings));
-        push(new WaitingState(this, states.peek(), settings.fps() / 2));   // Medio segundo de pausa al iniciar el juego
     }
 
     public void push(GameState state) {

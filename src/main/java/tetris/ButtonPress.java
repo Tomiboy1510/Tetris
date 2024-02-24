@@ -6,5 +6,6 @@ public enum ButtonPress {
     MOVE_RIGHT,
     ROTATE_COUNTER_CLOCKWISE,
     ROTATE_CLOCKWISE,
-    PAUSE
+    PAUSE,
+    RESET
 }

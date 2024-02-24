@@ -91,6 +91,10 @@ public class GameArea {
         return gameOver;
     }
 
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
     public void rotateClockWise() {
         currentTetromino.rotate(Tetromino.RotationSenses.CLOCKWISE);
         if (collides(currentTetromino) || outOfBounds(currentTetromino))

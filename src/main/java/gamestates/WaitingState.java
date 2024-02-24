@@ -46,6 +46,10 @@ public class WaitingState implements GameState {
     public void buttonPressed(ButtonPress p) {
         switch (p) {
             case PAUSE -> manager.push(new PauseState(manager, this));
+            case RESET -> {
+                stateBeneath.buttonPressed(ButtonPress.RESET);
+                manager.pop();
+            }
         }
     }
 }

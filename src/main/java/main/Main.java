@@ -34,13 +34,14 @@ public class Main {
         palette[5] = new Color(67, 170, 139);
         palette[6] = new Color(87, 117, 144);
 
-        String[] keys = new String[6];
+        String[] keys = new String[7];
         keys[0] = "A";
         keys[1] = "S";
         keys[2] = "D";
         keys[3] = "Z";
         keys[4] = "SPACE";
         keys[5] = "P";
+        keys[6] = "R";
 
         GamePanel gp = new GamePanel(new GameSettings(
                 1024,

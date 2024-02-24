@@ -65,6 +65,7 @@ public class GamePanel extends JPanel implements Runnable {
         inputMap.put(KeyStroke.getKeyStroke(keys[3]), "rotateCounterClockwise");
         inputMap.put(KeyStroke.getKeyStroke(keys[4]), "rotateClockwise");
         inputMap.put(KeyStroke.getKeyStroke(keys[5]), "pause");
+        inputMap.put(KeyStroke.getKeyStroke(keys[6]), "reset");
 
         inputMap.put(KeyStroke.getKeyStroke("release " + keys[0]), "rel moveLeft");
         inputMap.put(KeyStroke.getKeyStroke("release " + keys[1]), "rel moveDown");
@@ -76,6 +77,7 @@ public class GamePanel extends JPanel implements Runnable {
         actionMap.put("rotateCounterClockwise", new ButtonAction(ButtonPress.ROTATE_COUNTER_CLOCKWISE));
         actionMap.put("rotateClockwise", new ButtonAction(ButtonPress.ROTATE_CLOCKWISE));
         actionMap.put("pause", new ButtonAction(ButtonPress.PAUSE));
+        actionMap.put("reset", new ButtonAction(ButtonPress.RESET));
 
         actionMap.put("rel moveLeft", new ButtonAction(ButtonPress.MOVE_LEFT));
         actionMap.put("rel moveDown", new ButtonAction(ButtonPress.MOVE_DOWN));
