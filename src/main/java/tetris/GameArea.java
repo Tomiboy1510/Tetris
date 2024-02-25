@@ -205,6 +205,27 @@ public class GameArea {
     }
 
     private void clearRows() {
-        // TO-DO
+        int filledRows = 0;
+        for (int row = 0; row < 20; row++)
+            if (isRowFilled(row)) {
+                filledRows++;
+                // Empty row
+                for (int i = 0; i < 10; i++)
+                    staticBlocks[i][row] = null;
+            }
+        if (filledRows > 0)
+            collapse();
+        // score += completeRows * blablabla;
+    }
+
+    private boolean isRowFilled(int row) {
+        for (int i = 0; i < 10; i++)
+            if (staticBlocks[i][row] == null)
+                return false;
+        return true;
+    }
+
+    private void collapse() {
+        // Collapse rows
     }
 }

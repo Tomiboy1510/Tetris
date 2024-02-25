@@ -17,6 +17,8 @@ import java.util.Random;
         - Limpiar líneas completas
         - Puntaje, elementos de la interfaz en general
         - Javadoc
+        - Poner los comentarios en inglés
+        - Permitir cambiar dimensiones del área de juego? (Hasta ahora están hardcodeadas)
      Cosas que podría implementar luego:
         - Launcher con: keybindings, paletas de colores, resolución, FPS
 */
