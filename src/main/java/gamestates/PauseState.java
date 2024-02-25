@@ -18,7 +18,7 @@ public class PauseState implements GameState {
 
     @Override
     public void entering() {
-        // Reproducir sonido?
+        // Play sound?
     }
 
     @Override
@@ -28,21 +28,20 @@ public class PauseState implements GameState {
 
     @Override
     public void draw(Graphics2D g) {
-        // Mostrar juego
+        // Render game area
         stateBeneath.draw(g);
 
-        // Mostrar cartel de PAUSA
+        // Show "PAUSE" sign?
 
     }
 
     @Override
     public void exiting() {
-        // Reproducir sonido?
+        // Play sound?
     }
 
     @Override
     public void buttonPressed(ButtonPress p) {
-        // Salir de la pausa
         switch (p) {
             case PAUSE -> manager.pop();
             case RESET -> {

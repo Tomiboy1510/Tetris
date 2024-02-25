@@ -16,14 +16,14 @@ public class GameArea {
 
     public GameArea(int posX, int posY, int width, int height, long seed, int fps, Color[] palette) {
 
-        // Fronteras del área
+        // Area bounds
         this.leftX = posX;
         this.rightX = posX + width;
         this.topY = posY;
         this.bottomY = posY + height;
         Block.SIZE = (width) / 10;
 
-        // Colores de los tetrominos
+        // Tetromino colors
         Tetromino_I.COLOR = palette[0];
         Tetromino_J.COLOR = palette[1];
         Tetromino_L.COLOR = palette[2];
@@ -32,7 +32,7 @@ public class GameArea {
         Tetromino_T.COLOR = palette[5];
         Tetromino_Z.COLOR = palette[6];
 
-        // Variables del juego
+        // Game variables
         framesUntilDrop = fps / 2;
         dropCounter = 0;
         gameOver = true;
@@ -43,12 +43,11 @@ public class GameArea {
     public void update() {
         if (framesUntilDrop == dropCounter) {
             if (isAtBottom()) {
-                // El tetromino aterrizó
+                // Tetromino landed
                 freezeTetromino();
                 clearRows();
                 spawnTetromino();
             } else
-                // Hacer caer el tetromino
                 moveDown();
             dropCounter = 0;
         }
@@ -64,7 +63,7 @@ public class GameArea {
     }
 
     public void draw(Graphics2D g) {
-        // Dibujar borde del área de juego
+        // Draw game area border
         g.setColor(Color.WHITE);
         int padding = 2;
         g.setStroke(new BasicStroke(padding));
@@ -75,11 +74,11 @@ public class GameArea {
                 (bottomY - topY) + padding * 2
         );
 
-        // Dibujar tetromino actual
+        // Draw current tetromino
         if (currentTetromino != null)
             currentTetromino.draw(g);
 
-        // Dibujar bloques
+        // Draw blocks
         g.setStroke(new BasicStroke(1));
         for (Block[] row : staticBlocks)
             for (Block b : row)
@@ -226,6 +225,6 @@ public class GameArea {
     }
 
     private void collapse() {
-        // Collapse rows
+
     }
 }

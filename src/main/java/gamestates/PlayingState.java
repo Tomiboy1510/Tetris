@@ -16,8 +16,7 @@ public class PlayingState implements GameState {
         this.manager = manager;
         this.fps = settings.fps();
 
-        // Inicializar área de juego (asegurando que la altura sea múltiplo de 20)
-        // La altura es el doble de 10, que es el ancho en bloques del área de juego
+        // Initialize game area ensuring that its height in pixels is a multiple of 20
         int pretendedHeight = (int) (settings.height() * 0.9);
         int remainder = pretendedHeight % 20;
         int gameAreaHeight = remainder == 0 ?
@@ -53,7 +52,7 @@ public class PlayingState implements GameState {
     @Override
     public void draw(Graphics2D g) {
         gameArea.draw(g);
-        // Dibujar elementos de la interfaz
+        // Draw interface elements (Score, next tetromino and such)
         //gameArea.getNextTetromino().draw(g);
     }
 

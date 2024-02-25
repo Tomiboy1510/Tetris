@@ -15,9 +15,9 @@ import java.util.Random;
           (Esto es para poder renderizar el siguiente tetromino fuera del área de juego)
         - Gestionar los keyReleases
         - Limpiar líneas completas
+        - Añadir sonido?
         - Puntaje, elementos de la interfaz en general
         - Javadoc
-        - Poner los comentarios en inglés
         - Permitir cambiar dimensiones del área de juego? (Hasta ahora están hardcodeadas)
      Cosas que podría implementar luego:
         - Launcher con: keybindings, paletas de colores, resolución, FPS
