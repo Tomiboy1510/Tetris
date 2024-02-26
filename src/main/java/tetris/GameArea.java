@@ -5,25 +5,24 @@ import java.util.Random;
 
 public class GameArea {
 
-    private final int leftX, rightX, topY, bottomY;
+    public final int leftX, rightX, topY, bottomY;
     private final Random random;
 
     private final int framesUntilDrop;
     private int dropCounter;
     private boolean gameOver;
-    private int score;
+    private int score, topScore;
 
     private Tetromino currentTetromino, nextTetromino;
     private final Block[][] staticBlocks = new Block[10][20];
 
     public GameArea(int posX, int posY, int width, int height, long seed, int fps, Color[] palette) {
-
         // Area bounds
         this.leftX = posX;
         this.rightX = posX + width;
         this.topY = posY;
         this.bottomY = posY + height;
-        Block.SIZE = (width) / 10;
+        Block.SIZE = width / 10;
 
         // Tetromino colors
         Tetromino_I.COLOR = palette[0];
@@ -36,6 +35,7 @@ public class GameArea {
 
         // Game variables
         score = 0;
+        topScore = 0;
         framesUntilDrop = fps / 2;
         dropCounter = 0;
         gameOver = true;
@@ -50,8 +50,12 @@ public class GameArea {
                 freezeTetromino();
                 clearRows();
                 spawnTetromino();
+                if (gameOver && score > topScore) {
+                    topScore = score;
+                }
             } else {
                 moveDown();
+                score--; // Score should only go up by 1 if user pressed 'down'
             }
             dropCounter = 0;
         }
@@ -64,6 +68,7 @@ public class GameArea {
                 staticBlocks[i][j] = null;
             }
         }
+        score = 0;
         gameOver = false;
         spawnTetromino();
     }
@@ -142,11 +147,20 @@ public class GameArea {
             }
         } else {
             dropCounter = 0;
+            score++;
         }
     }
 
     public Tetromino getNextTetromino() {
         return nextTetromino;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public int getTopScore() {
+        return topScore;
     }
 
     private boolean collides(Block b) {

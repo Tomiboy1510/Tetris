@@ -55,7 +55,38 @@ public class PlayingState implements GameState {
     public void draw(Graphics2D g) {
         gameArea.draw(g);
         // Draw interface elements (Score, next tetromino and such)
-        //gameArea.getNextTetromino().draw(g);
+        g.setColor(Color.WHITE);
+        int padding = 2;
+        g.setStroke(new BasicStroke(padding));
+        g.drawRect(
+                gameArea.rightX + (gameArea.rightX - gameArea.leftX) / 20,
+                gameArea.topY,
+                (gameArea.rightX - gameArea.leftX) / 2,
+                (gameArea.rightX - gameArea.leftX) / 2
+        );
+
+        g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, (gameArea.rightX - gameArea.leftX) / 12));
+        int uiTextY = gameArea.topY + (gameArea.rightX - gameArea.leftX) / 2 + (gameArea.rightX - gameArea.leftX) / 8;
+
+        g.drawString(
+                "Level: ",
+                gameArea.rightX + (gameArea.rightX - gameArea.leftX) / 20,
+                uiTextY
+        );
+
+        uiTextY += (gameArea.rightX - gameArea.leftX) / 8;
+        g.drawString(
+                "Score: " + gameArea.getScore(),
+                gameArea.rightX + (gameArea.rightX - gameArea.leftX) / 20,
+                uiTextY
+        );
+
+        uiTextY += (gameArea.rightX - gameArea.leftX) / 8;
+        g.drawString(
+                "Top score: " + gameArea.getTopScore(),
+                gameArea.rightX + (gameArea.rightX - gameArea.leftX) / 20,
+                uiTextY
+        );
     }
 
     @Override

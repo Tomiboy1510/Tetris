@@ -25,6 +25,7 @@ public class GamePanel extends JPanel implements Runnable {
         controller = new GameController(manager);
 
         setKeyBindings(settings.keys());
+
     }
 
     public void startGame() {

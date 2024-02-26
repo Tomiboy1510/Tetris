@@ -12,12 +12,11 @@ import java.util.Random;
         - Permitir a un tetromino cambiar de posición (afectando a los bloques) que lo componen,
           o bien, permitir renderizar un tetromino en cualquier posición.
           (Esto es para poder renderizar el siguiente tetromino fuera del área de juego)
-        - Gestionar los keyReleases
+        - Gestionar los keyReleases (Delayed Auto Shift)
         - Añadir sonido?
         - Puntaje, elementos de la interfaz en general
         - Javadoc
         - Aumentar velocidad del juego según el nivel?
-        - Permitir cambiar dimensiones del área de juego? (Hasta ahora están hardcodeadas)
      Cosas que podría implementar luego:
         - Launcher con: keybindings, paletas de colores, resolución, FPS
 */
