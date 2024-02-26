@@ -14,7 +14,6 @@ import java.util.Random;
           o bien, permitir renderizar un tetromino en cualquier posición.
           (Esto es para poder renderizar el siguiente tetromino fuera del área de juego)
         - Gestionar los keyReleases
-        - Limpiar líneas completas
         - Añadir sonido?
         - Puntaje, elementos de la interfaz en general
         - Javadoc

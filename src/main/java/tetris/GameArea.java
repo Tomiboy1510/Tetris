@@ -90,10 +90,6 @@ public class GameArea {
         return gameOver;
     }
 
-    public void setGameOver(boolean gameOver) {
-        this.gameOver = gameOver;
-    }
-
     public void rotateClockWise() {
         currentTetromino.rotate(Tetromino.RotationSenses.CLOCKWISE);
         if (collides(currentTetromino) || outOfBounds(currentTetromino))
@@ -208,13 +204,9 @@ public class GameArea {
         for (int row = 0; row < 20; row++)
             if (isRowFilled(row)) {
                 filledRows++;
-                // Empty row
-                for (int i = 0; i < 10; i++)
-                    staticBlocks[i][row] = null;
+                collapse(row);
             }
-        if (filledRows > 0)
-            collapse();
-        // score += completeRows * blablabla;
+        // score += filledRows * blablabla;
     }
 
     private boolean isRowFilled(int row) {
@@ -224,7 +216,24 @@ public class GameArea {
         return true;
     }
 
-    private void collapse() {
+    private void collapse(int row) {
+        // Empty row
+        for (int i = 0; i < 10; i++)
+            staticBlocks[i][row] = null;
 
+        if (row == 0)
+            return;
+
+        // Shift all rows above
+        for (int r = row; r > 0; r--)
+            for (int col = 0; col < 10; col++) {
+                staticBlocks[col][r] = staticBlocks[col][r - 1];
+                // Shift block coordinates vertically
+                if (staticBlocks[col][r] != null)
+                    staticBlocks[col][r].y += Block.SIZE;
+            }
+        // Empty first row
+        for (int col = 0; col < 10; col++)
+            staticBlocks[col][0] = null;
     }
 }
