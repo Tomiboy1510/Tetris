@@ -11,6 +11,8 @@ public class GameArea {
     private final int framesUntilDrop;
     private int dropCounter;
     private boolean gameOver;
+    private int score;
+
     private Tetromino currentTetromino, nextTetromino;
     private final Block[][] staticBlocks = new Block[10][20];
 
@@ -33,6 +35,7 @@ public class GameArea {
         Tetromino_Z.COLOR = palette[6];
 
         // Game variables
+        score = 0;
         framesUntilDrop = fps / 2;
         dropCounter = 0;
         gameOver = true;
@@ -206,7 +209,14 @@ public class GameArea {
                 filledRows++;
                 collapse(row);
             }
-        // score += filledRows * blablabla;
+        score += switch (filledRows) {
+            default -> 0;
+            case 1 -> 40;
+            case 2 -> 100;
+            case 3 -> 300;
+            case 4 -> 1200;
+        };
+        //System.out.println("Score: " + score);
     }
 
     private boolean isRowFilled(int row) {
