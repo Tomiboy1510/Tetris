@@ -6,25 +6,25 @@ import java.util.Random;
 public class GameArea {
 
     public final int leftX, rightX, topY, bottomY;
+    public final int fps;
     private final Random random;
 
-    private final int framesUntilDrop;
+    private int framesUntilDrop;
     private int dropCounter;
     private boolean gameOver;
-    private int score, topScore;
+    private int score, topScore, level, clearedRows;
 
     private Tetromino currentTetromino, nextTetromino;
     private final Block[][] staticBlocks = new Block[10][20];
 
     public GameArea(int posX, int posY, int width, int height, long seed, int fps, Color[] palette) {
-        // Area bounds
+        this.fps = fps;
         this.leftX = posX;
         this.rightX = posX + width;
         this.topY = posY;
         this.bottomY = posY + height;
         Block.SIZE = width / 10;
 
-        // Tetromino colors
         Tetromino_I.COLOR = palette[0];
         Tetromino_J.COLOR = palette[1];
         Tetromino_L.COLOR = palette[2];
@@ -34,10 +34,7 @@ public class GameArea {
         Tetromino_Z.COLOR = palette[6];
 
         // Game variables
-        score = 0;
         topScore = 0;
-        framesUntilDrop = fps / 2;
-        dropCounter = 0;
         gameOver = true;
         random = new Random(seed);
         nextTetromino = getTetromino((rightX + leftX) / 2, topY);
@@ -69,6 +66,9 @@ public class GameArea {
             }
         }
         score = 0;
+        clearedRows = 0;
+        setLevel(0);
+        dropCounter = 0;
         gameOver = false;
         spawnTetromino();
     }
@@ -163,6 +163,10 @@ public class GameArea {
         return topScore;
     }
 
+    public int getLevel() {
+        return level;
+    }
+
     private boolean collides(Block b) {
         for (Block[] row : staticBlocks) {
             for (Block s : row)
@@ -246,6 +250,7 @@ public class GameArea {
     }
 
     private void clearRows() {
+        // Clear rows
         int filledRows = 0;
         for (int row = 0; row < 20; row++) {
             if (isRowFilled(row)) {
@@ -253,7 +258,15 @@ public class GameArea {
                 collapse(row);
             }
         }
-        score += switch (filledRows) {
+
+        // Increase level and speed up game
+        clearedRows += filledRows;
+        if (clearedRows % 10 == 0) {
+            setLevel(clearedRows / 10);
+        }
+
+        // Increase score
+        score += (level + 1) * switch (filledRows) {
             default -> 0;
             case 1 -> 40;
             case 2 -> 100;
@@ -296,5 +309,10 @@ public class GameArea {
         for (int col = 0; col < 10; col++) {
             staticBlocks[col][0] = null;
         }
+    }
+
+    private void setLevel(int l) {
+        level = l;
+        framesUntilDrop = fps / (level + 2);
     }
 }

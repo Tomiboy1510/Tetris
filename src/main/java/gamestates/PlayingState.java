@@ -69,7 +69,7 @@ public class PlayingState implements GameState {
         int uiTextY = gameArea.topY + (gameArea.rightX - gameArea.leftX) / 2 + (gameArea.rightX - gameArea.leftX) / 8;
 
         g.drawString(
-                "Level: ",
+                "Level: " + gameArea.getLevel(),
                 gameArea.rightX + (gameArea.rightX - gameArea.leftX) / 20,
                 uiTextY
         );
