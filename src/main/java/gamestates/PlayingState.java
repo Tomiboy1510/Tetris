@@ -37,16 +37,18 @@ public class PlayingState implements GameState {
 
     @Override
     public void entering() {
-        if (gameArea.isGameOver())
+        if (gameArea.isGameOver()) {
             gameArea.reset();
+        }
     }
 
     @Override
     public void update() {
         if (gameArea.isGameOver()) {
-            manager.push(new WaitingState(manager, this, fps));
-        } else
+            manager.push(new WaitingState(manager, this, fps * 3));
+        } else {
             gameArea.update();
+        }
     }
 
     @Override
