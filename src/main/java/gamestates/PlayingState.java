@@ -87,6 +87,13 @@ public class PlayingState implements GameState {
                 gameArea.rightX + (gameArea.rightX - gameArea.leftX) / 20,
                 uiTextY
         );
+
+        uiTextY += (gameArea.rightX - gameArea.leftX) / 8;
+        g.drawString(
+                "Lines cleared: " + gameArea.getClearedRows(),
+                gameArea.rightX + (gameArea.rightX - gameArea.leftX) / 20,
+                uiTextY
+        );
     }
 
     @Override

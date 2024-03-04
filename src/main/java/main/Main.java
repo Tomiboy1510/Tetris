@@ -16,9 +16,9 @@ import java.util.Random;
         - Añadir sonido?
         - Puntaje, elementos de la interfaz en general
         - Javadoc
-        - Aumentar velocidad del juego según el nivel?
+        - Parametrizar números hardcodeados
      Cosas que podría implementar luego:
-        - Launcher con: keybindings, paletas de colores, resolución, FPS
+        - Launcher con: keybindings, paletas de colores, resolución
 */
 
 public class Main {

@@ -12,7 +12,11 @@ public class GameArea {
     private int framesUntilDrop;
     private int dropCounter;
     private boolean gameOver;
-    private int score, topScore, level, clearedRows;
+    private int score;
+    private int topScore;
+    private int level;
+
+    private int clearedRows;
 
     private Tetromino currentTetromino, nextTetromino;
     private final Block[][] staticBlocks = new Block[10][20];
@@ -53,6 +57,7 @@ public class GameArea {
             } else {
                 moveDown();
                 score--; // Score should only go up by 1 if user pressed 'down'
+                // Push waiting state?
             }
             dropCounter = 0;
         }
@@ -65,6 +70,7 @@ public class GameArea {
                 staticBlocks[i][j] = null;
             }
         }
+
         score = 0;
         clearedRows = 0;
         setLevel(0);
@@ -232,6 +238,10 @@ public class GameArea {
         };
     }
 
+    public int getClearedRows() {
+        return clearedRows;
+    }
+
     private boolean isAtBottom() {
         for (Block b : currentTetromino.getBlocks()) {
             if (b.y == bottomY - Block.SIZE) {
@@ -261,9 +271,7 @@ public class GameArea {
 
         // Increase level and speed up game
         clearedRows += filledRows;
-        if (clearedRows % 10 == 0) {
-            setLevel(clearedRows / 10);
-        }
+        setLevel((clearedRows - clearedRows % 10) / 10);
 
         // Increase score
         score += (level + 1) * switch (filledRows) {
