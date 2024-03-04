@@ -1,7 +1,11 @@
 package tetris;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
+import java.util.Scanner;
 
 public class GameArea {
 
@@ -38,7 +42,7 @@ public class GameArea {
         Tetromino_Z.COLOR = palette[6];
 
         // Game variables
-        topScore = 0;
+        loadTopSCore();
         gameOver = true;
         random = new Random(seed);
         nextTetromino = getTetromino((rightX + leftX) / 2, topY);
@@ -53,6 +57,7 @@ public class GameArea {
                 spawnTetromino();
                 if (gameOver && score > topScore) {
                     topScore = score;
+                    saveTopScore();
                 }
             } else {
                 moveDown();
@@ -322,5 +327,21 @@ public class GameArea {
     private void setLevel(int l) {
         level = l;
         framesUntilDrop = fps / (level + 2);
+    }
+
+    private void loadTopSCore() {
+        try (Scanner scanner = new Scanner(new File("topscore.txt"))) {
+            topScore = scanner.nextInt();
+        } catch (IOException | java.util.NoSuchElementException e) {
+            this.topScore = 0;
+        }
+    }
+
+    private void saveTopScore() {
+        try (FileWriter writer = new FileWriter("topscore.txt")) {
+            writer.write(Integer.toString(topScore));
+        } catch (IOException e) {
+            // Do nothing
+        }
     }
 }
