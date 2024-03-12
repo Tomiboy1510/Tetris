@@ -9,15 +9,11 @@ import java.util.Random;
 
 /*
     TODO:
-        - Permitir a un tetromino cambiar de posición (afectando a los bloques) que lo componen,
-          o bien, permitir renderizar un tetromino en cualquier posición.
-          (Esto es para poder renderizar el siguiente tetromino fuera del área de juego)
         - Gestionar los keyReleases (Delayed Auto Shift)
         - Añadir sonido?
         - Javadoc
-        - Parametrizar números hardcodeados
-     Cosas que podría implementar luego:
         - Launcher con: keybindings, paletas de colores, resolución
+        - Xinput?
 */
 
 public class Main {

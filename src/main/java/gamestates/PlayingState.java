@@ -28,7 +28,7 @@ public class PlayingState implements GameState {
 
     public PlayingState(GameStateManager manager, GameSettings settings) {
         this.manager = manager;
-        this.fps = settings.fps();
+        fps = settings.fps();
 
         // Initialize game area ensuring that its height in pixels is a multiple of 20
         int pretendedHeight = (int) (settings.height() * 0.9);
@@ -38,13 +38,10 @@ public class PlayingState implements GameState {
                 pretendedHeight - remainder;
         int gameAreaWidth = gameAreaHeight / 2;
 
-        int posX = settings.width() / 2 - gameAreaWidth / 2;
-        int posY = settings.height() / 2 - gameAreaHeight / 2;
-
-        this.leftX = posX;
-        this.rightX = posX + gameAreaWidth;
-        this.topY = posY;
-        this.bottomY = posY + gameAreaHeight;
+        leftX = settings.width() / 2 - gameAreaWidth / 2;
+        rightX = leftX + gameAreaWidth;
+        topY = settings.height() / 2 - gameAreaHeight / 2;
+        bottomY = topY + gameAreaHeight;
 
         Block.SIZE = gameAreaWidth / 10;
 
@@ -112,16 +109,25 @@ public class PlayingState implements GameState {
                 (bottomY - topY) + padding * 2
         );
 
-        // Draw next tetromino
+        // Draw next tetromino frame
+        int nextTetroFrameX = rightX + (rightX - leftX) / 20;
+        int nextTetroFrameSize = (rightX - leftX) / 2;
         g.drawRect(
-                rightX + (rightX - leftX) / 20,
+                nextTetroFrameX,
                 topY,
-                (rightX - leftX) / 2,
-                (rightX - leftX) / 2
+                nextTetroFrameSize,
+                nextTetroFrameSize
         );
 
         // Draw interface elements (Score, next tetromino and such)
         drawUiText(g);
+
+        // Draw next tetromino
+        nextTetromino.draw(
+                g,
+                nextTetroFrameX + (int)(nextTetroFrameSize / 3.5),
+                topY + (int)(nextTetroFrameSize / 2.5)
+        );
 
         // Draw current tetromino
         if (currentTetromino != null) {

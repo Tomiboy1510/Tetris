@@ -7,11 +7,11 @@ public class Tetromino_S extends Tetromino {
     public static Color COLOR;
 
     public Tetromino_S(int x, int y) {
-        x -= Block.SIZE;
-        y += Block.SIZE; // Offset
-        blocks[0] = new Block(x, y, COLOR);
-        blocks[1] = new Block(x + Block.SIZE, y, COLOR);
-        blocks[2] = new Block(x + Block.SIZE, y + Block.SIZE, COLOR);
-        blocks[3] = new Block(x, y - Block.SIZE, COLOR);
+        super(x - Block.SIZE, y + Block.SIZE);
+
+        blocks[0] = new Block(this.x, this.y, COLOR);
+        blocks[1] = new Block(this.x + Block.SIZE, this.y, COLOR);
+        blocks[2] = new Block(this.x + Block.SIZE, this.y + Block.SIZE, COLOR);
+        blocks[3] = new Block(this.x, this.y - Block.SIZE, COLOR);
     }
 }

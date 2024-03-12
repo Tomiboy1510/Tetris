@@ -4,7 +4,13 @@ import java.awt.*;
 
 public abstract class Tetromino {
 
+    int x, y;
     protected Block[] blocks = new Block[4];
+
+    public Tetromino(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
     public enum RotationSenses {
         CLOCKWISE,
@@ -14,6 +20,11 @@ public abstract class Tetromino {
     public void draw(Graphics2D g) {
         for (Block b : blocks)
             b.draw(g);
+    }
+
+    public void draw(Graphics2D g, int x, int y) {
+        for (Block b : blocks)
+            b.draw(g, x + (b.x - this.x), y + (b.y - this.y));
     }
 
     public Block[] getBlocks() {
