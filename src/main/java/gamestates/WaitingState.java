@@ -11,8 +11,8 @@ public class WaitingState implements GameState {
     private final int frames;
     private int counter;
 
-    public WaitingState(GameStateManager manager, GameState stateBeneath, int frames) {
-        this.stateBeneath = stateBeneath;
+    public WaitingState(GameStateManager manager, int frames) {
+        this.stateBeneath = manager.getCurrentState();
         this.frames = frames;
         this.manager = manager;
     }
@@ -44,7 +44,7 @@ public class WaitingState implements GameState {
     @Override
     public void buttonPressed(ButtonPress p) {
         switch (p) {
-            case PAUSE -> manager.push(new PauseState(manager, this));
+            case PAUSE -> manager.push(new PauseState(manager));
             case RESET -> {
                 stateBeneath.buttonPressed(ButtonPress.RESET);
                 manager.pop();

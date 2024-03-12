@@ -17,7 +17,7 @@ public class GameStateManager {
 
     public void push(GameState state) {
         states.push(state);
-        states.peek().entering();
+        state.entering();
     }
 
     public void pop() {
@@ -35,5 +35,9 @@ public class GameStateManager {
 
     public void buttonPressed(ButtonPress p) {
         states.peek().buttonPressed(p);
+    }
+
+    public GameState getCurrentState() {
+        return states.peek();
     }
 }

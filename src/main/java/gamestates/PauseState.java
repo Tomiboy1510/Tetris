@@ -9,12 +9,10 @@ public class PauseState implements GameState {
     private final GameStateManager manager;
     private final GameState stateBeneath;
 
-    public PauseState(GameStateManager manager, GameState stateBeneath) {
+    public PauseState(GameStateManager manager) {
         this.manager = manager;
-        this.stateBeneath = stateBeneath;
+        this.stateBeneath = manager.getCurrentState();
     }
-
-
 
     @Override
     public void entering() {

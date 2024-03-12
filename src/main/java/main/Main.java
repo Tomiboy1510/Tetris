@@ -14,7 +14,6 @@ import java.util.Random;
           (Esto es para poder renderizar el siguiente tetromino fuera del área de juego)
         - Gestionar los keyReleases (Delayed Auto Shift)
         - Añadir sonido?
-        - Puntaje, elementos de la interfaz en general
         - Javadoc
         - Parametrizar números hardcodeados
      Cosas que podría implementar luego:
