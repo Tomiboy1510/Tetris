@@ -29,8 +29,14 @@ public class PauseState implements GameState {
         // Render game area
         stateBeneath.draw(g);
 
-        // Show "PAUSE" sign?
-
+        // Show "PAUSE" sign
+        g.setColor(Color.WHITE);
+        g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, manager.getGameSettings().width() / 20));
+        g.drawString(
+                "PAUSE",
+                manager.getGameSettings().width() / 80,
+                manager.getGameSettings().width() / 20
+        );
     }
 
     @Override

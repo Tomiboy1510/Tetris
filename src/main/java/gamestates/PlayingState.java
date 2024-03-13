@@ -26,8 +26,9 @@ public class PlayingState implements GameState {
     private Tetromino currentTetromino, nextTetromino;
     private final Block[][] staticBlocks = new Block[10][20];
 
-    public PlayingState(GameStateManager manager, GameSettings settings) {
+    public PlayingState(GameStateManager manager) {
         this.manager = manager;
+        GameSettings settings = manager.getGameSettings();
         fps = settings.fps();
 
         // Initialize game area ensuring that its height in pixels is a multiple of 20

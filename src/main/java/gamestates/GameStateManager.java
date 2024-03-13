@@ -9,10 +9,12 @@ import java.util.Stack;
 public class GameStateManager {
 
     private final Stack<GameState> states;
+    private final GameSettings settings;
 
     public GameStateManager(GameSettings settings) {
+        this.settings = settings;
         states = new Stack<>();
-        push(new PlayingState(this, settings));
+        push(new PlayingState(this));
     }
 
     public void push(GameState state) {
@@ -39,5 +41,9 @@ public class GameStateManager {
 
     public GameState getCurrentState() {
         return states.peek();
+    }
+
+    public GameSettings getGameSettings() {
+        return settings;
     }
 }
