@@ -8,12 +8,12 @@ public class WaitingState implements GameState {
 
     private final GameStateManager manager;
     private final GameState stateBeneath;
-    private final int frames;
+    private final int FRAMES;
     private int counter;
 
     public WaitingState(GameStateManager manager, int frames) {
         this.stateBeneath = manager.getCurrentState();
-        this.frames = frames;
+        this.FRAMES = frames;
         this.manager = manager;
     }
 
@@ -24,7 +24,7 @@ public class WaitingState implements GameState {
 
     @Override
     public void update() {
-        if (counter == frames) {
+        if (counter == FRAMES) {
             manager.pop();
             return;
         }

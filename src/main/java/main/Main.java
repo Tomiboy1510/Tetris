@@ -9,7 +9,6 @@ import java.util.Random;
 
 /*
     TODO:
-        - Gestionar los keyReleases (Delayed Auto Shift)
         - Añadir sonido?
         - Javadoc
         - Launcher con: keybindings, paletas de colores, resolución

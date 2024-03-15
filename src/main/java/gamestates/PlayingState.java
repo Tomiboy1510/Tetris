@@ -12,9 +12,9 @@ import java.util.Scanner;
 public class PlayingState implements GameState {
 
     private final GameStateManager manager;
-    private final int leftX, rightX, topY, bottomY;
+    private final int LEFT_X, RIGHT_X, TOP_Y, BOTTOM_Y;
+    private final int FPS;
     private final Random random;
-    private final int fps;
 
     private int framesUntilDrop;
     private int dropCounter;
@@ -29,7 +29,7 @@ public class PlayingState implements GameState {
     public PlayingState(GameStateManager manager) {
         this.manager = manager;
         GameSettings settings = manager.getGameSettings();
-        fps = settings.fps();
+        FPS = settings.fps();
 
         // Initialize game area ensuring that its height in pixels is a multiple of 20
         int pretendedHeight = (int) (settings.height() * 0.9);
@@ -39,10 +39,10 @@ public class PlayingState implements GameState {
                 pretendedHeight - remainder;
         int gameAreaWidth = gameAreaHeight / 2;
 
-        leftX = settings.width() / 2 - gameAreaWidth / 2;
-        rightX = leftX + gameAreaWidth;
-        topY = settings.height() / 2 - gameAreaHeight / 2;
-        bottomY = topY + gameAreaHeight;
+        LEFT_X = settings.width() / 2 - gameAreaWidth / 2;
+        RIGHT_X = LEFT_X + gameAreaWidth;
+        TOP_Y = settings.height() / 2 - gameAreaHeight / 2;
+        BOTTOM_Y = TOP_Y + gameAreaHeight;
 
         Block.SIZE = gameAreaWidth / 10;
 
@@ -58,7 +58,7 @@ public class PlayingState implements GameState {
         loadTopSCore();
         gameOver = true;
         random = new Random(settings.seed());
-        nextTetromino = getTetromino((rightX + leftX) / 2, topY);
+        nextTetromino = getTetromino((RIGHT_X + LEFT_X) / 2, TOP_Y);
     }
 
     @Override
@@ -74,21 +74,22 @@ public class PlayingState implements GameState {
             if (isAtBottom()) {
                 // Tetromino landed
                 freezeTetromino();
-                clearRows();
+                if (clearRows() > 0) {
+                    manager.push(new WaitingState(manager, FPS / 4));
+                }
                 spawnTetromino();
                 if (gameOver) {
-                    manager.push(new WaitingState(manager, fps * 3));
+                    manager.push(new WaitingState(manager, FPS * 3));
                     if (score > topScore) {
                         topScore = score;
                         saveTopScore();
                     }
                 } else {
-                    manager.push(new WaitingState(manager, fps / 8));
+                    manager.push(new WaitingState(manager, FPS / 6));
                 }
             } else {
                 moveDown();
                 score--; // Score should only go up by 1 if user pressed 'down'
-                // Push waiting state?
             }
             dropCounter = 0;
         }
@@ -104,18 +105,18 @@ public class PlayingState implements GameState {
 
         // Draw game area border
         g.drawRect(
-                leftX - padding,
-                topY - padding,
-                (rightX - leftX) + padding * 2,
-                (bottomY - topY) + padding * 2
+                LEFT_X - padding,
+                TOP_Y - padding,
+                (RIGHT_X - LEFT_X) + padding * 2,
+                (BOTTOM_Y - TOP_Y) + padding * 2
         );
 
         // Draw next tetromino frame
-        int nextTetroFrameX = rightX + (rightX - leftX) / 20;
-        int nextTetroFrameSize = (rightX - leftX) / 2;
+        int nextTetroFrameX = RIGHT_X + (RIGHT_X - LEFT_X) / 20;
+        int nextTetroFrameSize = (RIGHT_X - LEFT_X) / 2;
         g.drawRect(
                 nextTetroFrameX,
-                topY,
+                TOP_Y,
                 nextTetroFrameSize,
                 nextTetroFrameSize
         );
@@ -127,7 +128,7 @@ public class PlayingState implements GameState {
         nextTetromino.draw(
                 g,
                 nextTetroFrameX + (int)(nextTetroFrameSize / 3.5),
-                topY + (int)(nextTetroFrameSize / 2.5)
+                TOP_Y + (int)(nextTetroFrameSize / 2.5)
         );
 
         // Draw current tetromino
@@ -162,39 +163,39 @@ public class PlayingState implements GameState {
             case PAUSE -> manager.push(new PauseState(manager));
             case RESET -> {
                 reset();
-                manager.push(new WaitingState(manager, fps));
+                manager.push(new WaitingState(manager, FPS));
             }
         }
     }
 
     private void drawUiText(Graphics2D g) {
-        g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, (rightX - leftX) / 12));
-        int uiTextY = topY + (rightX - leftX) / 2 + (rightX - leftX) / 8;
+        g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, (RIGHT_X - LEFT_X) / 12));
+        int uiTextY = TOP_Y + (RIGHT_X - LEFT_X) / 2 + (RIGHT_X - LEFT_X) / 8;
 
         g.drawString(
                 "Level: " + level,
-                rightX + (rightX - leftX) / 20,
+                RIGHT_X + (RIGHT_X - LEFT_X) / 20,
                 uiTextY
         );
 
-        uiTextY += (rightX - leftX) / 8;
+        uiTextY += (RIGHT_X - LEFT_X) / 8;
         g.drawString(
                 "Score: " + score,
-                rightX + (rightX - leftX) / 20,
+                RIGHT_X + (RIGHT_X - LEFT_X) / 20,
                 uiTextY
         );
 
-        uiTextY += (rightX - leftX) / 8;
+        uiTextY += (RIGHT_X - LEFT_X) / 8;
         g.drawString(
                 "Top score: " + topScore,
-                rightX + (rightX - leftX) / 20,
+                RIGHT_X + (RIGHT_X - LEFT_X) / 20,
                 uiTextY
         );
 
-        uiTextY += (rightX - leftX) / 8;
+        uiTextY += (RIGHT_X - LEFT_X) / 8;
         g.drawString(
                 "Lines cleared: " + clearedRows,
-                rightX + (rightX - leftX) / 20,
+                RIGHT_X + (RIGHT_X - LEFT_X) / 20,
                 uiTextY
         );
     }
@@ -246,6 +247,11 @@ public class PlayingState implements GameState {
     }
 
     private void moveDown() {
+        if (isAtBottom()) {
+            dropCounter = framesUntilDrop;
+            return;
+        }
+
         for (Block b : currentTetromino.getBlocks()) {
             b.y += Block.SIZE;
         }
@@ -281,10 +287,10 @@ public class PlayingState implements GameState {
     }
 
     private boolean outOfBounds(Block b) {
-        return (b.x < leftX ||
-                b.x + Block.SIZE > rightX ||
-                b.y < topY ||
-                b.y + Block.SIZE > bottomY);
+        return (b.x < LEFT_X ||
+                b.x + Block.SIZE > RIGHT_X ||
+                b.y < TOP_Y ||
+                b.y + Block.SIZE > BOTTOM_Y);
     }
 
     private boolean outOfBounds(Tetromino t) {
@@ -298,15 +304,15 @@ public class PlayingState implements GameState {
 
     private void freezeTetromino() {
         for (Block b : currentTetromino.getBlocks()) {
-            int x = (b.x - leftX) / Block.SIZE;
-            int y = (b.y - topY) / Block.SIZE;
+            int x = (b.x - LEFT_X) / Block.SIZE;
+            int y = (b.y - TOP_Y) / Block.SIZE;
             staticBlocks[x][y] = b;
         }
     }
 
     private void spawnTetromino() {
         currentTetromino = nextTetromino;
-        nextTetromino = getTetromino((rightX + leftX) / 2, topY);
+        nextTetromino = getTetromino((RIGHT_X + LEFT_X) / 2, TOP_Y);
         if (collides(currentTetromino)) {
             gameOver = true;
         }
@@ -327,12 +333,12 @@ public class PlayingState implements GameState {
     private boolean isAtBottom() {
         for (Block b : currentTetromino.getBlocks()) {
             // At bottom of game area?
-            if (b.y == bottomY - Block.SIZE) {
+            if (b.y == BOTTOM_Y - Block.SIZE) {
                 return true;
             }
             // On top of other blocks?
-            int x = (b.x - leftX) / Block.SIZE;
-            int y = (b.y - topY) / Block.SIZE;
+            int x = (b.x - LEFT_X) / Block.SIZE;
+            int y = (b.y - TOP_Y) / Block.SIZE;
             if (staticBlocks[x][y + 1] != null) {
                 return true;
             }
@@ -340,7 +346,7 @@ public class PlayingState implements GameState {
         return false;
     }
 
-    private void clearRows() {
+    private int clearRows() {
         // Clear rows
         int filledRows = 0;
         for (int row = 0; row < 20; row++) {
@@ -362,6 +368,8 @@ public class PlayingState implements GameState {
             case 3 -> 300;
             case 4 -> 1200;
         };
+
+        return filledRows;
     }
 
     private boolean isRowFilled(int row) {
@@ -402,7 +410,7 @@ public class PlayingState implements GameState {
 
     private void setLevel(int l) {
         level = l;
-        framesUntilDrop = fps / (level + 2);
+        framesUntilDrop = FPS / (level + 2);
     }
 
     private void loadTopSCore() {

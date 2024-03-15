@@ -12,7 +12,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     private final GameStateManager manager;
     private final GameController controller;
-    private final int fps;
+    private final int FPS;
 
     public GamePanel(GameSettings settings) {
         setPreferredSize(new Dimension(settings.width(), settings.height()));
@@ -20,12 +20,11 @@ public class GamePanel extends JPanel implements Runnable {
         setLayout(null);
         setFocusable(true);
 
-        this.fps = settings.fps();
+        this.FPS = settings.fps();
         manager = new GameStateManager(settings);
         controller = new GameController(manager);
 
         setKeyBindings(settings.keys());
-
     }
 
     public void startGame() {
@@ -37,7 +36,7 @@ public class GamePanel extends JPanel implements Runnable {
         //  Game loop
         long lastTime = System.nanoTime();
         long now;
-        double intervalNano = 1_000_000_000 / (double) fps;
+        double intervalNano = 1_000_000_000 / (double) FPS;
         double delta = 0;
 
         while (true) {
