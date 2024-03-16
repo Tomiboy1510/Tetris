@@ -3,9 +3,7 @@ package main;
 import javax.swing.*;
 
 /*
-    TODO:
-        - Añadir sonido
-        - Javadoc
+    TODO: Añadir sonido
 */
 
 public class Main {

@@ -7,14 +7,14 @@ public abstract class Tetromino {
     int x, y;
     protected Block[] blocks = new Block[4];
 
-    public Tetromino(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
     public enum RotationSenses {
         CLOCKWISE,
         COUNTER_CLOCKWISE
+    }
+
+    public Tetromino(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
     public void draw(Graphics2D g) {

@@ -8,5 +8,5 @@ public record GameSettings(
         long seed,
         int fps,
         Color[] palette,
-        int[] keys
+        int[] keyBindings
 ) {}

@@ -5,12 +5,12 @@ import tetris.ButtonPress;
 
 public class GameController {
 
-    private final boolean[] pressed;
+    private final boolean[] pressed; // Holds the state of each button
     private final GameStateManager manager;
-    private long lastShiftTime = 0;
-    private boolean delayEntered = false;
-    private boolean delayExited = false;
-    private long lastDropTime = 0;
+    private long lastShiftTime = 0; // Last time a horizontal movement was made
+    private long lastDropTime = 0; // Last time a downward movement was made
+    private boolean delayEntered = false; // Becomes true AFTER a horizontal movement is first made
+    private boolean delayExited = false; // Becomes true when the auto shift delay has passed
 
     public GameController(GameStateManager manager) {
         this.manager = manager;
