@@ -15,6 +15,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final int FPS;
 
     public GamePanel(GameSettings settings) {
+
         setPreferredSize(new Dimension(settings.width(), settings.height()));
         setBackground(Color.BLACK);
         setLayout(null);
