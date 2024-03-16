@@ -3,11 +3,8 @@ package gamestates;
 import tetris.*;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Random;
-import java.util.Scanner;
 
 public class PlayingState implements GameState {
 
@@ -414,18 +411,18 @@ public class PlayingState implements GameState {
     }
 
     private void loadTopSCore() {
-        try (Scanner scanner = new Scanner(new File("topscore.txt"))) {
-            topScore = scanner.nextInt();
-        } catch (IOException | java.util.NoSuchElementException e) {
+        try (DataInputStream dis = new DataInputStream(new FileInputStream("topscore.bin"))) {
+            topScore = dis.readInt();
+        } catch (Exception e) {
             this.topScore = 0;
         }
     }
 
     private void saveTopScore() {
-        try (FileWriter writer = new FileWriter("topscore.txt")) {
-            writer.write(Integer.toString(topScore));
-        } catch (IOException e) {
-            // Do nothing
+        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream("topscore.bin"))) {
+            dos.writeInt(topScore);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

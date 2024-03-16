@@ -5,7 +5,9 @@ import tetris.GameSettings;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
@@ -15,24 +17,11 @@ public class GameLauncher extends JFrame {
     private final Map<String, Dimension> resolutions;
     private final JComboBox<String> resComboBox;
     private final JTextField seedText;
-    private final int[] keyBindings;
-    private final JButton changeKeyBindingsButton;
-    private final JButton startButton;
 
     public GameLauncher() {
         setTitle("Tetris");
         setFocusable(true);
         setResizable(false);
-
-        keyBindings = new int[] {
-                KeyEvent.VK_A,
-                KeyEvent.VK_S,
-                KeyEvent.VK_D,
-                KeyEvent.VK_Z,
-                KeyEvent.VK_SPACE,
-                KeyEvent.VK_P,
-                KeyEvent.VK_R,
-        };
 
         setLayout(new GridLayout(4,1));
 
@@ -49,19 +38,21 @@ public class GameLauncher extends JFrame {
 
         seedText = new JTextField(15);
 
-        changeKeyBindingsButton = new JButton("Change key bindings");
+        JButton changeKeyBindingsButton = new JButton("Change key bindings");
         changeKeyBindingsButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //changeKeyBindings();
+                changeKeyBindings();
             }
         });
 
-        startButton = new JButton("START GAME");
+        JButton startButton = new JButton("START GAME");
         startButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                setVisible(false);
                 launchGame();
+                dispose();
             }
         });
 
@@ -88,8 +79,6 @@ public class GameLauncher extends JFrame {
     }
 
     private void launchGame() {
-        setVisible(false);
-
         Color[] palette = new Color[] {
                 new Color(249, 65, 68),
                 new Color(243, 114, 44),
@@ -115,7 +104,7 @@ public class GameLauncher extends JFrame {
                 seed,
                 60,
                 palette,
-                keyBindings
+                loadKeyBindings()
         ));
 
         JFrame gameWindow = new JFrame("Tetris");
@@ -130,25 +119,73 @@ public class GameLauncher extends JFrame {
         gp.startGame();
     }
 
-    /*public void changeKeyBindings() {
-        changeKeyBindingsButton.setEnabled(false);
-        startButton.setEnabled(false);
+    public void changeKeyBindings() {
 
-        String[] messages = new String[] {
-                "Press key for MOVE RIGHT",
-                "Press key for MOVE LEFT",
-                "Press key for MOVE DOWN",
-                "Press key for ROTATE COUNTERCLOCKWISE",
-                "Press key for ROTATE CLOCKWISE",
-                "Press key for PAUSE",
-                "Press key for RESET"
-        };
+        class KeyBindingWindow extends JFrame {
+            private int i = 0;
+            private final JLabel label;
+            private final String[] messages = new String[] {
+                    "Press key for MOVE LEFT",
+                    "Press key for MOVE DOWN",
+                    "Press key for MOVE RIGHT",
+                    "Press key for ROTATE COUNTERCLOCKWISE",
+                    "Press key for ROTATE CLOCKWISE",
+                    "Press key for PAUSE",
+                    "Press key for RESET"
+            };
 
-        for (int i = 0; i < messages.length; i++) {
-            keyBindings[i] = HACER ALGO;
+            public KeyBindingWindow() {
+                int[] keyBindings = new int[7];
+                label = new JLabel(messages[0], SwingConstants.CENTER);
+                add(label);
+                setSize(320, 140);
+                setResizable(false);
+                setLocationRelativeTo(null);
+                setVisible(true);
+
+                addKeyListener(new KeyAdapter() {
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        keyBindings[i] = e.getKeyCode();
+                        i++;
+                        if (i == keyBindings.length) {
+                            setVisible(false);
+                            dispose();
+                            saveKeyBindings(keyBindings);
+                        } else {
+                            label.setText(messages[i]);
+                        }
+                    }
+                });
+            }
         }
 
-        changeKeyBindingsButton.setEnabled(true);
-        startButton.setEnabled(true);
-    }*/
+        new KeyBindingWindow();
+    }
+
+    private int[] loadKeyBindings() {
+        try (DataInputStream dis = new DataInputStream(new FileInputStream("keybindings.bin"))) {
+            int[] keyBindings = new int[7];
+            for (int i = 0; i < keyBindings.length; i++) {
+                keyBindings[i] = dis.readInt();
+            }
+            return keyBindings;
+        } catch (Exception e) {
+            return new int[] {
+                    KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D,
+                    KeyEvent.VK_Z, KeyEvent.VK_SPACE,
+                    KeyEvent.VK_P, KeyEvent.VK_R,
+            };
+        }
+    }
+
+    private void saveKeyBindings(int[] keyBindings) {
+        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream("keybindings.bin"))) {
+            for (int key : keyBindings) {
+                dos.writeInt(key);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

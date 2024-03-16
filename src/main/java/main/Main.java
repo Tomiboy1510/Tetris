@@ -1,13 +1,11 @@
 package main;
 
 import javax.swing.*;
-import java.awt.*;
 
 /*
     TODO:
         - Añadir sonido
         - Javadoc
-        - GameLauncher con: keybindings, resolución, semilla
 */
 
 public class Main {
