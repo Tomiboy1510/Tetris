@@ -46,63 +46,40 @@ public class GameController {
             pressed[i] = false;
         }
 
-        handleTetrominoMovements();
+        handleDrops();
+        handleShifts(ButtonPress.MOVE_LEFT);
+        handleShifts(ButtonPress.MOVE_RIGHT);
     }
 
-    private void handleTetrominoMovements() {
+    private void handleDrops() {
         int AUTO_DROP_INTERVAL = 50;
-        int AUTO_SHIFT_DELAY = 150;
-        int AUTO_SHIFT_INTERVAL = 60;
 
-        // Handle MOVE_DOWN
-        if (    pressed[ButtonPress.MOVE_DOWN.ordinal()] &&
-                System.currentTimeMillis() - lastDropTime > AUTO_DROP_INTERVAL) {
+        if (! pressed[ButtonPress.MOVE_DOWN.ordinal()])
+            return;
+
+        if (System.currentTimeMillis() - lastDropTime > AUTO_DROP_INTERVAL) {
             manager.buttonPressed(ButtonPress.MOVE_DOWN);
             lastDropTime = System.currentTimeMillis();
         }
+    }
 
-        // Handle MOVE_RIGHT
-        if (pressed[ButtonPress.MOVE_RIGHT.ordinal()]) {
-            if (delayEntered && delayExited) {
-                if (System.currentTimeMillis() - lastShiftTime > AUTO_SHIFT_INTERVAL) {
-                    manager.buttonPressed(ButtonPress.MOVE_RIGHT);
-                    lastShiftTime = System.currentTimeMillis();
-                }
-            } else {
-                if (delayEntered) {
-                    if (System.currentTimeMillis() - lastShiftTime > AUTO_SHIFT_DELAY) {
-                        manager.buttonPressed(ButtonPress.MOVE_RIGHT);
-                        lastShiftTime = System.currentTimeMillis();
-                        delayExited = true;
-                    }
-                } else {
-                    manager.buttonPressed(ButtonPress.MOVE_RIGHT);
-                    lastShiftTime = System.currentTimeMillis();
-                    delayEntered = true;
-                }
-            }
+    private void handleShifts(ButtonPress p) {
+        int AUTO_SHIFT_DELAY = 150;
+        int AUTO_SHIFT_INTERVAL = 60;
+
+        if (! pressed[p.ordinal()])
+            return;
+
+        boolean delayHasPassed = System.currentTimeMillis() - lastShiftTime > AUTO_SHIFT_DELAY;
+
+        if (    (! delayEntered)
+                || (delayExited && System.currentTimeMillis() - lastShiftTime > AUTO_SHIFT_INTERVAL)
+                || (! delayExited && delayHasPassed)) {
+            manager.buttonPressed(p);
+            lastShiftTime = System.currentTimeMillis();
         }
 
-        // Handle MOVE_LEFT
-        if (pressed[ButtonPress.MOVE_LEFT.ordinal()]) {
-            if (delayEntered && delayExited) {
-                if (System.currentTimeMillis() - lastShiftTime > AUTO_SHIFT_INTERVAL) {
-                    manager.buttonPressed(ButtonPress.MOVE_LEFT);
-                    lastShiftTime = System.currentTimeMillis();
-                }
-            } else {
-                if (delayEntered) {
-                    if (System.currentTimeMillis() - lastShiftTime > AUTO_SHIFT_DELAY) {
-                        manager.buttonPressed(ButtonPress.MOVE_LEFT);
-                        lastShiftTime = System.currentTimeMillis();
-                        delayExited = true;
-                    }
-                } else {
-                    manager.buttonPressed(ButtonPress.MOVE_LEFT);
-                    lastShiftTime = System.currentTimeMillis();
-                    delayEntered = true;
-                }
-            }
-        }
+        delayExited = delayExited || (delayEntered && delayHasPassed);
+        delayEntered = true;
     }
 }
