@@ -9,3 +9,4 @@ Tetris clone made using Java Swing
 - Line clear gravity works the same as in NES Tetris
 - Key bindings can be edited
 - Top score and key binding configuration persist between executions
+- Sound by Kenney (www.kenney.nl) (License: CC0)

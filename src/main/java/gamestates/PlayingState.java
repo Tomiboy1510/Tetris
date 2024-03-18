@@ -1,5 +1,6 @@
 package gamestates;
 
+import main.SoundManager;
 import tetris.*;
 
 import java.awt.*;
@@ -72,10 +73,14 @@ public class PlayingState implements GameState {
                 // Tetromino landed
                 freezeTetromino();
                 if (clearRows() > 0) {
+                    SoundManager.getInstance().playSound("clear_lines.wav");
                     manager.push(new WaitingState(manager, FPS / 4));
+                } else {
+                    SoundManager.getInstance().playSound("lay_down.wav");
                 }
                 spawnTetromino();
                 if (gameOver) {
+                    SoundManager.getInstance().playSound("gameover.wav");
                     manager.push(new WaitingState(manager, FPS * 3));
                     if (score > topScore) {
                         topScore = score;

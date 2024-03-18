@@ -1,5 +1,6 @@
 package gamestates;
 
+import main.SoundManager;
 import tetris.ButtonPress;
 
 import java.awt.*;
@@ -16,12 +17,12 @@ public class PauseState implements GameState {
 
     @Override
     public void entering() {
-        // Play sound?
+        SoundManager.getInstance().playSound("pause.wav");
     }
 
     @Override
     public void update() {
-
+        // Do nothing
     }
 
     @Override
@@ -41,7 +42,7 @@ public class PauseState implements GameState {
 
     @Override
     public void exiting() {
-        // Play sound?
+        SoundManager.getInstance().playSound("unpause.wav");
     }
 
     @Override

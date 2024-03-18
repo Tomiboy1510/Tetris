@@ -2,10 +2,6 @@ package main;
 
 import javax.swing.*;
 
-/*
-    TODO: Añadir sonido
-*/
-
 public class Main {
 
     public static void main (String[] args) {
