@@ -115,7 +115,8 @@ public class GameLauncher extends JFrame {
         gameWindow.pack();
         gameWindow.setLocationRelativeTo(null);
         gameWindow.setVisible(true);
-        gameWindow.requestFocusInWindow();
+
+        SwingUtilities.invokeLater(gameWindow::requestFocusInWindow);
         
         gp.startGame();
     }
